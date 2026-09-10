@@ -411,3 +411,118 @@ kbd {
     opacity: 1;
   }
 }
+
+
+/* —— Touch drive pad (phones / tablets) —— */
+#touch-controls {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+#touch-controls.show {
+  display: block;
+}
+body.touch-ui #controls {
+  display: none;
+}
+#touch-stick {
+  pointer-events: auto;
+  position: absolute;
+  left: max(12px, env(safe-area-inset-left));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 210, 122, 0.35);
+  background: rgba(10, 6, 10, 0.45);
+  touch-action: none;
+  user-select: none;
+}
+#touch-stick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-radius: 50%;
+  background: rgba(255, 106, 43, 0.55);
+  border: 1px solid rgba(255, 210, 122, 0.55);
+  box-shadow: 0 0 18px rgba(255, 106, 43, 0.35);
+  will-change: transform;
+}
+#touch-buttons {
+  pointer-events: none;
+  position: absolute;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: 72px 72px 88px;
+  grid-template-rows: 52px 72px 88px;
+  gap: 10px;
+  touch-action: none;
+  user-select: none;
+}
+.touch-btn {
+  pointer-events: auto;
+  margin: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 210, 122, 0.4);
+  background: rgba(10, 6, 10, 0.55);
+  color: var(--cream, #ffecdc);
+  font: 700 12px/1 system-ui, sans-serif;
+  letter-spacing: 0.12em;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.touch-btn.active {
+  background: rgba(255, 106, 43, 0.45);
+  border-color: rgba(255, 210, 122, 0.8);
+}
+.touch-map {
+  grid-column: 1;
+  grid-row: 1;
+  border-radius: 12px;
+  font-size: 11px;
+}
+.touch-rev {
+  grid-column: 2;
+  grid-row: 1;
+  border-radius: 12px;
+  font-size: 11px;
+}
+.touch-boost {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  writing-mode: horizontal-tb;
+}
+.touch-brake {
+  grid-column: 1 / 3;
+  grid-row: 2;
+}
+.touch-gas {
+  grid-column: 1 / 4;
+  grid-row: 3;
+  border-radius: 20px;
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  background: rgba(74, 224, 200, 0.18);
+  border-color: rgba(74, 224, 200, 0.45);
+}
+.touch-gas.active {
+  background: rgba(74, 224, 200, 0.4);
+}
+@media (max-width: 420px) {
+  #touch-stick {
+    width: 112px;
+    height: 112px;
+  }
+  #touch-buttons {
+    grid-template-columns: 56px 56px 68px;
+    grid-template-rows: 48px 64px 78px;
+    gap: 8px;
+  }
+}

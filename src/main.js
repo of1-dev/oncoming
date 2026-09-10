@@ -55,6 +55,7 @@ import {
   drawRoute,
   navWaypoint,
 } from './nav.js';
+import { touch, setupTouchControls } from './touch.js';
 
 function circleAABB(cx, cz, r, b) {
   const qx = clamp(cx, b.minX, b.maxX);
@@ -94,6 +95,12 @@ function readInput() {
   if (keys.has('KeyD') || keys.has('ArrowRight')) steer += 1;
   if (keys.has('Space')) brake = 1;
   if (keys.has('ShiftLeft') || keys.has('ShiftRight')) boost = true;
+
+  // Touch pad (phones / tablets) — additive with keyboard / gamepad
+  if (touch.steer) steer += touch.steer;
+  if (touch.throttle) throttle += touch.throttle;
+  if (touch.brake) brake = 1;
+  if (touch.boost) boost = true;
 
   const pads = navigator.getGamepads ? navigator.getGamepads() : [];
   let pad = null;
@@ -1144,8 +1151,11 @@ function updateHud() {
   if (hud.loadout) hud.loadout.textContent = loadoutText();
 
   const pad = input.padConnected ? ' · gamepad live' : '';
+  const touchLine = touch.shown
+    ? '<div>Touch: left stick steer · GAS · REV · BRAKE · BOOST · MAP</div>'
+    : '<div>Pad: left stick steer · RT / A throttle · B brake · RB / X boost · teal GARAGE / orange JUNCTION markers</div>';
   hud.controls.innerHTML = `<div><kbd>WASD</kbd> / <kbd>Arrows</kbd> drive · <kbd>Shift</kbd> boost · <kbd>Space</kbd> brake · <kbd>M</kbd> map · garage bay to swap parts${pad}</div>
-    <div>Pad: left stick steer · RT / A throttle · B brake · RB / X boost · teal GARAGE / orange JUNCTION markers</div>`;
+    ${touchLine}`;
 
   updateCompass();
   updateMinimap();
@@ -1188,6 +1198,12 @@ window.addEventListener('keydown', (e) => onKey(e, true));
 window.addEventListener('keyup', (e) => onKey(e, false));
 window.addEventListener('mousedown', begin);
 window.addEventListener('gamepadconnected', begin);
+setupTouchControls({
+  onBegin: begin,
+  onMap: () => {
+    if (!garage.open && !modes.open) openNav();
+  },
+});
 window.addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
