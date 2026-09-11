@@ -91,7 +91,8 @@ export function setupTouchControls({ onBegin, onMap } = {}) {
       knob.style.transform = `translate(${dx}px, ${dy}px)`;
     }
     const nx = dx / max;
-    touch.steer = Math.abs(nx) > 0.08 ? Math.max(-1, Math.min(1, nx)) : 0;
+    // Finger right = screen right; game steer wants opposite of raw X (user-reported flip)
+    touch.steer = Math.abs(nx) > 0.08 ? Math.max(-1, Math.min(1, -nx)) : 0;
   };
   const clearStick = () => {
     stickId = null;
